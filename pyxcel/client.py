@@ -3,6 +3,9 @@
 import requests
 
 import pyxcel.api as api
+from pyxcel.billing import Billing
+from pyxcel.overview import Overview
+from pyxcel.usages import Usages
 
 
 class Client(api.BaseAPI):
@@ -12,9 +15,14 @@ class Client(api.BaseAPI):
         """Initialize."""
         self._username = username
         self._password = password
+        self.session = requests.Session()
 
-        super().__init__(requests.Session())
+        super().__init__(self.session)
         self.create_session()
+
+        self.billing = Billing(self.session)
+        self.overview = Overview(self.session)
+        self.usages = Usages(self.session)
 
     def create_session(self):
         """Create a session."""
@@ -26,17 +34,3 @@ class Client(api.BaseAPI):
                 'j_password': self._password
             })
         self.get('user/login.req')
-
-    def get_account_overview(self):
-        """Get the "dashboard data" for the account."""
-        return self.get('user/getJsonAccountOverview.req').json()
-
-    def get_bills(self):
-        """Get bill infomation for the account."""
-        return self.get('user/getMyBillsAccounts.req').json()
-
-    def get_usages(self, premise_id):
-        """Get the usage information for a particular "premise"."""
-        return self.get(
-            'user/getJsonAccountUsages.req',
-            params={'premise': premise_id}).json()

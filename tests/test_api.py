@@ -7,7 +7,7 @@ import requests_mock
 
 import pyxcel
 from pyxcel.const import XCEL_API_BASE_URL
-from tests.fixtures.client import *  # noqa
+from tests.fixtures.general import *  # noqa
 
 
 def test_api_exception(password, username):
