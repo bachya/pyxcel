@@ -24,3 +24,18 @@ def test_billing_get(billing_get_200, password, username):
 
         client = pyxcel.Client(username, password)
         assert client.billing.get() == billing_get_200
+
+
+def test_billing_get_expired(password, username):
+    """Test getting bill information with an expired session."""
+    with requests_mock.Mocker() as mock:
+        mock.post('{0}/j_spring_security_check'.format(XCEL_API_BASE_URL))
+        mock.get('{0}/user/login.req'.format(XCEL_API_BASE_URL))
+        mock.get(
+            '{0}/user/getMyBillsAccounts.req'.format(XCEL_API_BASE_URL),
+            text=None)
+
+        with pytest.raises(pyxcel.exceptions.XcelSessionError) as exc_info:
+            client = pyxcel.Client(username, password)
+            client.billing.get()
+            assert 'JSON' in str(exc_info)

@@ -24,3 +24,18 @@ def test_overview_get(overview_get_200, password, username):
 
         client = pyxcel.Client(username, password)
         assert client.overview.get() == overview_get_200
+
+
+def test_overview_get_expired(password, username):
+    """Test getting the account overview with an expired session."""
+    with requests_mock.Mocker() as mock:
+        mock.post('{0}/j_spring_security_check'.format(XCEL_API_BASE_URL))
+        mock.get('{0}/user/login.req'.format(XCEL_API_BASE_URL))
+        mock.get(
+            '{0}/user/getJsonAccountOverview.req'.format(XCEL_API_BASE_URL),
+            text=None)
+
+        with pytest.raises(pyxcel.exceptions.XcelSessionError) as exc_info:
+            client = pyxcel.Client(username, password)
+            client.overview.get()
+            assert 'JSON' in str(exc_info)

@@ -24,3 +24,18 @@ def test_usages(password, premise_id, usages_get_200, username):
 
         client = pyxcel.Client(username, password)
         assert client.usages.get(premise_id) == usages_get_200
+
+
+def test_usages_expired(password, premise_id, username):
+    """Test getting usage information with an expired session."""
+    with requests_mock.Mocker() as mock:
+        mock.post('{0}/j_spring_security_check'.format(XCEL_API_BASE_URL))
+        mock.get('{0}/user/login.req'.format(XCEL_API_BASE_URL))
+        mock.get(
+            '{0}/user/getJsonAccountUsages.req'.format(XCEL_API_BASE_URL),
+            text=None)
+
+        with pytest.raises(pyxcel.exceptions.XcelSessionError) as exc_info:
+            client = pyxcel.Client(username, password)
+            client.usages.get(premise_id)
+            assert 'JSON' in str(exc_info)

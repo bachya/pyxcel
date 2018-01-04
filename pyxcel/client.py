@@ -20,9 +20,9 @@ class Client(api.BaseAPI):
         super().__init__(self.session)
         self.create_session()
 
-        self.billing = Billing(self.session)
-        self.overview = Overview(self.session)
-        self.usages = Usages(self.session)
+        self.billing = Billing(self, self.session)
+        self.overview = Overview(self, self.session)
+        self.usages = Usages(self, self.session)
 
     def create_session(self):
         """Create a session."""
