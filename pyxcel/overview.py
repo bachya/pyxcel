@@ -1,6 +1,5 @@
 """Define an object that retrieves overview data."""
 
-import weakref
 from json.decoder import JSONDecodeError
 
 import pyxcel.api as api
@@ -14,7 +13,7 @@ class Overview(api.BaseAPI):
 
     def __init__(self, client, session):
         """Initialize."""
-        self.client = weakref.ref(client)
+        self.client = client
         self.parent = super()
         self.parent.__init__(session)
 
