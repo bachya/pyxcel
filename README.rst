@@ -46,13 +46,13 @@ Usage
   client = pyxcel.Client('username', 'password12345')
 
   # Retrieves the account overview (including energy usage, grades, etc.):
-  client.get_account_overview()
+  client.overview.get()
 
   # Retrieves all billing information for the account
-  client.get_bills()
+  client.billing.get()
 
   # Retrives detailed information for a particular premise:
-  client.get_usages('PREMISE_ID')
+  client.usages.get('PREMISE_ID')
 
 Contributing
 ============
