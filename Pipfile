@@ -8,6 +8,7 @@ name = "pypi"
 [packages]
 
 requests = "*"
+urllib3 = ">=1.23"
 
 
 [dev-packages]
@@ -15,6 +16,7 @@ requests = "*"
 Sphinx = "*"
 codecov = "*"
 coverage = "*"
+Jinja2 = ">=2.10.1"
 detox = "*"
 flake8 = "*"
 pytest = "*"
